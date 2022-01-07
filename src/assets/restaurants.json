@@ -1,0 +1,104 @@
+[
+  {
+    "id": "bronco",
+    "restaurantName": "Bronco",
+    "address": "39 Rue des Petites Écuries, 75010 Paris",
+    "lat": 48.8737815,
+    "long": 2.3501649,
+    "ratings": [
+      {
+        "stars": 4,
+        "comment": "Un excellent restaurant, j'y reviendrai ! Par contre il vaut mieux aimer la viande."
+      },
+      {
+        "stars": 5,
+        "comment": "Tout simplement mon restaurant préféré !"
+      }
+    ]
+  },
+  {
+    "id": "babalou",
+    "restaurantName": "Babalou",
+    "address": "4 Rue Lamarck, 75018 Paris",
+    "lat": 48.8865035,
+    "long": 2.3442197,
+    "ratings": [
+      {
+        "stars": 5,
+        "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+      },
+      {
+        "stars": 3,
+        "comment": "J'ai trouvé ça correct, sans plus"
+      }
+    ]
+  },
+  {
+    "id": "cosi",
+    "restaurantName": "Cosi",
+    "address": "5 Rue des Filles du Clavaire, 75003 Paris",
+    "lat": 48.86282579876989,
+    "long": 2.3651870567794395,
+    "ratings": [
+      {
+        "stars": 5,
+        "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+      },
+      {
+        "stars": 3,
+        "comment": "J'ai trouvé ça correct, sans plus"
+      }
+    ]
+  },
+  {
+    "id": "kuma",
+    "restaurantName": "Kuma",
+    "address": "5 Rue des Ecouffes, 75004 Paris",
+    "lat": 48.85677206728471,
+    "long": 2.358365352393114,
+    "ratings": [
+      {
+        "stars": 5,
+        "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+      },
+      {
+        "stars": 3,
+        "comment": "J'ai trouvé ça correct, sans plus"
+      }
+    ]
+  },
+  {
+    "id": "papacionu",
+    "restaurantName": "Le Papacionu",
+    "address": "7 Rue Cadet, 75009 Paris",
+    "lat": 48.87486735586483,
+    "long": 2.342809053124412,
+    "ratings": [
+      {
+        "stars": 5,
+        "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+      },
+      {
+        "stars": 3,
+        "comment": "J'ai trouvé ça correct, sans plus"
+      }
+    ]
+  },
+  {
+    "id": "office",
+    "restaurantName": "L'office",
+    "address": "3 Rue Richer, 75009 Paris",
+    "lat": 48.87398425960285,
+    "long": 2.3474404274978333,
+    "ratings": [
+      {
+        "stars": 5,
+        "comment": "Une minuscule pizzeria délicieuse cachée juste à côté du Sacré choeur !"
+      },
+      {
+        "stars": 3,
+        "comment": "J'ai trouvé ça correct, sans plus"
+      }
+    ]
+  }
+]

@@ -31,8 +31,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/main.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "scripts": []
           },
           "configurations": {
@@ -107,5 +112,8 @@
       }
     }
   },
-  "defaultProject": "gerry-advisor"
+  "defaultProject": "gerry-advisor",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
