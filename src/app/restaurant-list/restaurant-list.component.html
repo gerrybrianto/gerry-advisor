@@ -1,0 +1,12 @@
+<ul>
+  <li
+    class="restaurant"
+    *ngFor="let restaurant of restaurants; trackBy: trackByFn"
+    (click)="zoomOnRestaurant.emit(restaurant)"
+  >
+    {{ restaurant | json }}
+    <span class="ratings"
+      >Notes moyennes : {{ restaurantRatingsAvg(restaurant.ratings) }}</span
+    >
+  </li>
+</ul>

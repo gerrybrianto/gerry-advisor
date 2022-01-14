@@ -7,19 +7,10 @@
     </section>
     <section class="restaurants-list-container">
       <h2>Liste des restaurants</h2>
-      <ul>
-        <li
-          class="restaurant"
-          *ngFor="let restaurant of restaurants; trackBy: trackByFn"
-          (click)="zoomOnRestaurant(restaurant)"
-        >
-          {{ restaurant | json }}
-          <span class="ratings"
-            >Notes moyennes :
-            {{ restaurantRatingsAvg(restaurant.ratings) }}</span
-          >
-        </li>
-      </ul>
+      <app-restaurant-list
+        [restaurant]="restaurant$ | async"
+        (add)="onAdd($event)"
+      ></app-restaurant-list>
     </section>
   </div>
   <footer class="page-footer"></footer>

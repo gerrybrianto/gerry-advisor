@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Restaurants from '../assets/restaurants.json';
+import { Restaurant } from './restaurant-list/restaurants.model';
 
-type Restaurant = {
-  id: string;
-  restaurantName: string;
-  address: string;
-  lat: number;
-  long: number;
-  ratings: { stars: number; comment: string }[];
-};
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,20 +9,26 @@ type Restaurant = {
 })
 export class AppComponent implements OnInit {
   title = 'gerry-advisor';
-  restaurants: Restaurant[];
   googleMapOptions: google.maps.MapOptions;
   map: any;
   infoWindow: any;
+  restaurants$ = this.store.select(selectRestaurants);
+  restaurantCollection$ = this.store.select(selectRestaurantCollection);
+
+  onAdd(restaurantId: string) {
+    this.store.dispatch(addRestaurant({ restaurantId }));
+  }
+
+  onRemove(restaurantId: string) {
+    this.store.dispatch(removeRestaurant({ restaurantId }));
+  }
 
   constructor() {
     this.googleMapOptions = {};
     this.map = google.maps.Map;
     this.infoWindow = google.maps.InfoWindow;
-    this.restaurants = [];
   }
   ngOnInit(): void {
-    Restaurants.forEach((restaurant) => this.restaurants.push(restaurant));
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
@@ -52,10 +51,6 @@ export class AppComponent implements OnInit {
       // Browser doesn't support Geolocation
       this.handleLocationError(false, this.infoWindow, this.map.getCenter()!);
     }
-  }
-
-  trackByFn(index: number, item: any): number {
-    return item.id;
   }
 
   zoomOnRestaurant(restaurant: Restaurant): void {
