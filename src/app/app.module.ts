@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,10 +11,16 @@ import { collectionReducer } from './store/reducers/collection.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { RestaurantListComponent } from './restaurant-list/restaurant-list.component';
+import { RestaurantCollectionComponent } from './restaurant-collection/restaurant-collection.component';
 
 @NgModule({
-  declarations: [AppComponent, RestaurantListComponent],
+  declarations: [
+    AppComponent,
+    RestaurantListComponent,
+    RestaurantCollectionComponent,
+  ],
   imports: [
+    HttpClientModule,
     GoogleMapsModule,
     BrowserModule,
     AppRoutingModule,

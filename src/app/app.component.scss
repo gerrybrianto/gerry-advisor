@@ -1,13 +1,13 @@
 .page-content {
   grid-area: main;
   display: flex;
+  flex: 1 1 0px;
 }
 
 .map-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 65%;
   border: solid red 1px;
 }
 
@@ -15,20 +15,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 35%;
   overflow: auto;
   border: solid red 1px;
-}
-
-.restaurant {
-  cursor: pointer;
-  border: solid 1px black;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  padding: 10px;
-  &:hover {
-    background: darken($color: white, $amount: 7%);
-  }
 }
 
 .ratings {

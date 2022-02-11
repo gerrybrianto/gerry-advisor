@@ -4,5 +4,10 @@ export interface Restaurant {
   address: string;
   lat: number;
   long: number;
-  ratings: { stars: number; comment: string }[];
+  avgRating: number;
 }
+
+export type Rating = {
+  stars: number;
+  comment: string;
+};

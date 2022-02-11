@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import Restaurants from '../assets/restaurants.json';
-import { Restaurant } from './restaurant-list/restaurants.model';
+import { Store } from '@ngrx/store';
+import { EMPTY, forkJoin, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Rating, Restaurant } from './restaurant-list/restaurants.model';
+import { GooglePlacesService } from './restaurant-list/restaurants.service';
+import { addRestaurant, removeRestaurant } from './store/restaurants.actions';
+import {
+  selectRestaurantCollection,
+  selectRestaurants,
+} from './store/restaurants.selector';
 
 @Component({
   selector: 'app-root',
@@ -12,21 +20,22 @@ export class AppComponent implements OnInit {
   googleMapOptions: google.maps.MapOptions;
   map: any;
   infoWindow: any;
-  restaurants$ = this.store.select(selectRestaurants);
-  restaurantCollection$ = this.store.select(selectRestaurantCollection);
+  restaurants$: Observable<readonly Restaurant[] | null>;
+  restaurantsWithRatings$: Observable<
+    { restaurant: Restaurant; ratings: Rating[] }[]
+  >;
+  restaurantCollection$: Observable<readonly (Restaurant | undefined)[]>;
 
-  onAdd(restaurantId: string) {
-    this.store.dispatch(addRestaurant({ restaurantId }));
-  }
-
-  onRemove(restaurantId: string) {
-    this.store.dispatch(removeRestaurant({ restaurantId }));
-  }
-
-  constructor() {
+  constructor(
+    private store: Store,
+    private restaurantsService: GooglePlacesService
+  ) {
     this.googleMapOptions = {};
     this.map = google.maps.Map;
     this.infoWindow = google.maps.InfoWindow;
+    this.restaurants$ = this.store.select(selectRestaurants);
+    this.restaurantCollection$ = this.store.select(selectRestaurantCollection);
+    this.restaurantsWithRatings$ = new Observable();
   }
   ngOnInit(): void {
     if (navigator.geolocation) {
@@ -36,15 +45,15 @@ export class AppComponent implements OnInit {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          this.setMapPos(pos);
-          console.log(this.googleMapOptions);
-        },
-        () => {
-          this.handleLocationError(
-            true,
-            this.infoWindow,
-            this.map.getCenter()!
-          );
+          this.setMapPos(pos, 19);
+          this.restaurantsWithRatings$ = this.restaurantsService
+            .getRestaurants(pos)
+            .pipe(
+              map((restaurants) => restaurants.map(this.getRestaurantRatings)),
+              switchMap((restaurantsWithRatings$) =>
+                forkJoin(restaurantsWithRatings$)
+              )
+            );
         }
       );
     } else {
@@ -53,33 +62,31 @@ export class AppComponent implements OnInit {
     }
   }
 
+  onAdd(restaurantId: string) {
+    this.store.dispatch(addRestaurant({ restaurantId }));
+  }
+
+  onRemove(restaurantId: string) {
+    this.store.dispatch(removeRestaurant({ restaurantId }));
+  }
+
   zoomOnRestaurant(restaurant: Restaurant): void {
     const pos = {
       lat: restaurant.lat,
       lng: restaurant.long,
     };
-    this.setMapPos(pos);
+    this.setMapPos(pos, 10);
     console.log('gMapOptions: ', this.googleMapOptions);
   }
 
-  setMapPos(pos: { lat: number; lng: number }): void {
+  setMapPos(pos: { lat: number; lng: number }, zoom: number): void {
     this.googleMapOptions = {
       center: { lat: pos.lat, lng: pos.lng },
-      zoom: 19,
+      zoom: zoom,
     };
   }
 
-  restaurantRatingsAvg(ratings: { stars: number; comment: string }[]): number {
-    const ratingsStarArr: number[] = [];
-    ratings.forEach((rating) => ratingsStarArr.push(rating.stars));
-    return this.arrayAvg(ratingsStarArr);
-  }
-
-  arrayAvg(arr: number[]): number {
-    return arr.reduce((a, b) => a + b) / arr.length;
-  }
-
-  handleLocationError(
+  private handleLocationError(
     browserHasGeolocation: boolean,
     infoWindow: google.maps.InfoWindow,
     pos: google.maps.LatLng
@@ -91,5 +98,13 @@ export class AppComponent implements OnInit {
         : "Error: Your browser doesn't support geolocation."
     );
     infoWindow.open(this.map);
+  }
+
+  private getRestaurantRatings(
+    restaurant: Restaurant
+  ): Observable<{ restaurant: Restaurant; ratings: Rating[] }> {
+    return this.restaurantsService
+      .getReviews(restaurant.id)
+      .pipe(map((ratings) => ({ restaurant, ratings })));
   }
 }

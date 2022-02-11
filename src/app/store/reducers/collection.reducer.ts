@@ -10,7 +10,6 @@ export const collectionReducer = createReducer(
   ),
   on(addRestaurant, (state, { restaurantId }) => {
     if (state.indexOf(restaurantId) > -1) return state;
-
     return [...state, restaurantId];
   })
 );

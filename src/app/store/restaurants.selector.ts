@@ -11,8 +11,8 @@ export const selectRestaurantCollection = createSelector(
   selectRestaurants,
   selectCollectionState,
   (restaurants, collection) => {
-    return collection.map((id) =>
-      restaurants.find((restaurant) => restaurant.id === id)
+    return restaurants.filter((restaurant) =>
+      collection.some((id) => restaurant.id === id)
     );
   }
 );

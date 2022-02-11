@@ -1,0 +1,15 @@
+.restaurant {
+  border: solid 1px black;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 10px;
+  &:hover {
+    background: darken($color: white, $amount: 7%);
+  }
+}
+
+i {
+  cursor: pointer;
+  font-size: 2rem;
+  color: green;
+}

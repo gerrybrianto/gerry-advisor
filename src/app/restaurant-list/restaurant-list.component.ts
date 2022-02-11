@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Restaurant } from './restaurants.model';
+import { of } from 'rxjs';
+import { Rating, Restaurant } from './restaurants.model';
 
 @Component({
   selector: 'app-restaurant-list',
@@ -7,20 +8,17 @@ import { Restaurant } from './restaurants.model';
   styleUrls: ['./restaurant-list.component.scss'],
 })
 export class RestaurantListComponent implements OnInit {
-  @Input() restaurants: ReadonlyArray<Restaurant> = [];
+  @Input() restaurantsWithRatings: ReadonlyArray<{
+    restaurant: Restaurant;
+    ratings: Rating[];
+  }> | null;
   @Output() add: EventEmitter<string>;
   @Output() zoomOnRestaurant: EventEmitter<Restaurant>;
-  @Output() restaurantRatingsAvg: EventEmitter<
-    {
-      stars: number;
-      comment: string;
-    }[]
-  >;
 
   constructor() {
+    this.restaurantsWithRatings = [];
     this.add = new EventEmitter();
     this.zoomOnRestaurant = new EventEmitter();
-    this.restaurantRatingsAvg = new EventEmitter();
   }
 
   ngOnInit(): void {}

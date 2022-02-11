@@ -1,12 +1,17 @@
 <ul>
   <li
     class="restaurant"
-    *ngFor="let restaurant of restaurants; trackBy: trackByFn"
-    (click)="zoomOnRestaurant.emit(restaurant)"
+    *ngFor="
+      let restaurantWithRatings of restaurantsWithRatings;
+      trackBy: trackByFn
+    "
   >
-    {{ restaurant | json }}
+    {{ restaurantWithRatings | json }}
     <span class="ratings"
-      >Notes moyennes : {{ restaurantRatingsAvg(restaurant.ratings) }}</span
+      >Notes moyennes : {{ restaurantWithRatings.restaurant.avgRating }}</span
     >
+    <!--<span class="w=100 text-center"
+      ><i class="fas fa-plus" (click)="add.emit(restaurant.id)"></i
+    ></span>-->
   </li>
 </ul>
