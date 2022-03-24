@@ -1,17 +1,89 @@
-<ul>
-  <li
-    class="restaurant"
-    *ngFor="
-      let restaurantWithRatings of restaurantsWithRatings;
-      trackBy: trackByFn
-    "
-  >
-    {{ restaurantWithRatings | json }}
-    <span class="ratings"
-      >Notes moyennes : {{ restaurantWithRatings.restaurant.avgRating }}</span
+<div class="restaurants-list" *ngIf="listState === 'list'">
+  <div class="ratings-filter">
+    <input
+      class="ratings-filter-item"
+      id="minRating"
+      type="number"
+      [formControl]="minRating"
+      [class.ratings-filter-error]="minRating.invalid"
+    />
+    <input
+      class="ratings-filter-item"
+      id="maxRating"
+      type="number"
+      [formControl]="maxRating"
+      [class.ratings-filter-error]="maxRating.invalid"
+    />
+  </div>
+  <app-add-restaurant
+    class="add-restaurant"
+    (addRestaurant)="addCustomRestaurant($event)"
+  ></app-add-restaurant>
+  <ul>
+    <div *ngIf="customRestaurants">
+      <li
+        class="restaurant"
+        *ngFor="let customRestaurant of customRestaurants; let i = index"
+        (click)="selectRestaurant(i, customRestaurant)"
+      >
+        <div class="restaurant-infos">
+          <h3 class="restaurant-name">{{ customRestaurant.restaurantName }}</h3>
+
+          <span class="restaurant-address">{{ customRestaurant.address }}</span>
+        </div>
+      </li>
+    </div>
+    <div
+      *ngFor="
+        let restaurantWithRatings of restaurantsWithRatings;
+        let i = index
+      "
     >
-    <!--<span class="w=100 text-center"
-      ><i class="fas fa-plus" (click)="add.emit(restaurant.id)"></i
-    ></span>-->
-  </li>
-</ul>
+      <li
+        class="restaurant"
+        *ngIf="filterRestaurant(restaurantWithRatings.restaurant)"
+        (click)="selectRestaurant(i, restaurantWithRatings.restaurant)"
+      >
+        <div class="restaurant-infos">
+          <h3 class="restaurant-name">
+            {{ restaurantWithRatings.restaurant.restaurantName }}
+          </h3>
+
+          <span
+            class="restaurant-ratings"
+            *ngIf="restaurantWithRatings.ratings.length"
+            >Stars : {{ restaurantWithRatings.restaurant.avgRating }}</span
+          >
+          <span class="restaurant-address">{{
+            restaurantWithRatings.restaurant.address
+          }}</span>
+        </div>
+        <app-restaurant-image
+          class="restaurant-img"
+          [restaurantPos]="{
+            lat: restaurantWithRatings.restaurant.lat,
+            lng: restaurantWithRatings.restaurant.long
+          }"
+        ></app-restaurant-image>
+      </li>
+    </div>
+  </ul>
+</div>
+<div *ngIf="listState === 'focus'">
+  <span class="go-back"
+    ><i class="fas fa-arrow-left" (click)="listState = 'list'"></i
+  ></span>
+  <div class="restaurant-img-carousel"></div>
+  <div class="restaurant focused">
+    <div class="restaurant-infos">
+      <h3 class="restaurant-name">
+        {{ focusedRestaurant.restaurantName }}
+      </h3>
+
+      <span class="restaurant-ratings" *ngIf="focusedRestaurant.avgRating"
+        >Stars : {{ focusedRestaurant.avgRating }}</span
+      >
+      <span class="restaurant-address">{{ focusedRestaurant.address }}</span>
+    </div>
+  </div>
+</div>

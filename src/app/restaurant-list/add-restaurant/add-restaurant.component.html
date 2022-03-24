@@ -1,0 +1,22 @@
+<button class="add-btn" *ngIf="!showForm" (click)="showForm = true">
+  Add a new restaurant
+</button>
+<form
+  *ngIf="showForm"
+  class="add-restaurant-form"
+  [formGroup]="addRestaurantForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="form-section">
+    <label for="add-name">Restaurant's Name</label>
+    <input id="add-name" type="text" formControlName="restaurantName" />
+  </div>
+  <div class="form-section">
+    <label for="add-address">Address</label>
+    <input id="add-address" type="text" formControlName="address" />
+  </div>
+  <div class="add-restaurant-form-btn-container">
+    <button (click)="showForm = false">Cancel</button>
+    <button type="submit" [disabled]="!addRestaurantForm.valid">Add</button>
+  </div>
+</form>

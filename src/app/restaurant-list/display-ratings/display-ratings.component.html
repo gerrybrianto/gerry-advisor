@@ -1,0 +1,13 @@
+<ul class="ratings-list" *ngIf="show">
+  <li *ngFor="let rating of ratings">
+    <span class="ratings-list-stars"></span>
+    <p class="ratings-list-comment">{{ rating.comment }}</p>
+  </li>
+  <div *ngIf="customRatings">
+    <li *ngFor="let customRating of customRatings">
+      <span class="ratings-list-stars"></span>
+      <p class="ratings-list-comment">{{ customRating.comment }}</p>
+    </li>
+  </div>
+</ul>
+<app-add-rating (addRating)="addCustomRating($event)"></app-add-rating>
