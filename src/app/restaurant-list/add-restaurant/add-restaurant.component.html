@@ -1,4 +1,4 @@
-<button class="add-btn" *ngIf="!showForm" (click)="showForm = true">
+<button *ngIf="!showForm" (click)="showForm = true">
   Add a new restaurant
 </button>
 <form
@@ -9,14 +9,25 @@
 >
   <div class="form-section">
     <label for="add-name">Restaurant's Name</label>
-    <input id="add-name" type="text" formControlName="restaurantName" />
+    <input
+      id="add-name"
+      type="text"
+      formControlName="restaurantName"
+      required
+    />
   </div>
   <div class="form-section">
     <label for="add-address">Address</label>
-    <input id="add-address" type="text" formControlName="address" />
+    <input id="add-address" type="text" formControlName="address" required />
   </div>
   <div class="add-restaurant-form-btn-container">
     <button (click)="showForm = false">Cancel</button>
-    <button type="submit" [disabled]="!addRestaurantForm.valid">Add</button>
+    <button
+      type="submit"
+      [class.disabled]="addRestaurantForm.invalid || !addRestaurantForm.dirty"
+      [disabled]="addRestaurantForm.invalid || !addRestaurantForm.dirty"
+    >
+      Add
+    </button>
   </div>
 </form>

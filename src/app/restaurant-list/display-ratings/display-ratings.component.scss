@@ -1,7 +1,23 @@
 .ratings-list {
+  display: flex;
+  flex-direction: column;
+  &-title {
+    text-align: center;
+    font-weight: 500;
+    margin: 1rem 0;
+  }
   &-star {
     margin: 1.5rem 0;
   }
   &-comment {
+    margin-bottom: 1rem;
+    line-height: 1.3rem;
   }
+}
+
+.add-rating {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 1rem 0;
 }

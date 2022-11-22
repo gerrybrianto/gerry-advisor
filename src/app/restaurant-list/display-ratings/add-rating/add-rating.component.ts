@@ -14,6 +14,7 @@ export class AddRatingComponent implements OnInit {
   //rajouter restaurant Id en input
   @Output() addRating: EventEmitter<Rating>;
   addRatingForm: FormGroup;
+  showForm: boolean;
 
   constructor() {
     this.addRatingForm = new FormGroup({
@@ -21,18 +22,21 @@ export class AddRatingComponent implements OnInit {
       comment: new FormControl(''),
     });
     this.addRating = new EventEmitter();
+    this.showForm = false;
   }
 
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.addRatingForm.valid) {
+    if (this.addRatingForm.valid && this.addRatingForm.dirty) {
       console.log('addRatingForm: ,', this.addRatingForm.value);
       const formRating: Rating = {
         stars: this.addRatingForm.value.stars,
-        comment: this.addRatingForm.value.stars.comment,
+        comment: this.addRatingForm.value.comment,
       };
       this.addRating.emit(formRating);
+      this.addRatingForm.reset({ stars: 0, comment: '' });
+      this.showForm = false;
     }
   }
 }

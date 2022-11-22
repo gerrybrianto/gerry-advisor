@@ -1,30 +1,52 @@
-<div class="restaurants-list" *ngIf="listState === 'list'">
+<div class="open-list" *ngIf="!showList">
+  <i class="fas fa-bars open-list-icon"></i>
+</div>
+<div class="close-list-container" *ngIf="showList">
+  <i class="fas fa-times close-list"></i>
+</div>
+<div
+  class="restaurants-list"
+  *ngIf="listState === 'list'"
+  [class.hide]="!showList"
+>
   <div class="ratings-filter">
-    <input
-      class="ratings-filter-item"
-      id="minRating"
-      type="number"
-      [formControl]="minRating"
-      [class.ratings-filter-error]="minRating.invalid"
-    />
-    <input
-      class="ratings-filter-item"
-      id="maxRating"
-      type="number"
-      [formControl]="maxRating"
-      [class.ratings-filter-error]="maxRating.invalid"
-    />
+    <div>
+      <label>min</label>
+      <input
+        class="ratings-filter-item"
+        id="minRating"
+        type="number"
+        [formControl]="minRating"
+        [class.ratings-filter-error]="minRating.invalid"
+        min="0"
+        max="5"
+      />
+    </div>
+    <div></div>
+    <div>
+      <label>max</label>
+      <input
+        class="ratings-filter-item"
+        id="maxRating"
+        type="number"
+        [formControl]="maxRating"
+        [class.ratings-filter-error]="maxRating.invalid"
+        min="0"
+        max="5"
+      />
+    </div>
+    <span>stars</span>
   </div>
   <app-add-restaurant
     class="add-restaurant"
     (addRestaurant)="addCustomRestaurant($event)"
   ></app-add-restaurant>
-  <ul>
+  <ul class="restaurants-list-container">
     <div *ngIf="customRestaurants">
       <li
         class="restaurant"
         *ngFor="let customRestaurant of customRestaurants; let i = index"
-        (click)="selectRestaurant(i, customRestaurant)"
+        (click)="selectRestaurant(customRestaurant, true)"
       >
         <div class="restaurant-infos">
           <h3 class="restaurant-name">{{ customRestaurant.restaurantName }}</h3>
@@ -33,27 +55,19 @@
         </div>
       </li>
     </div>
-    <div
-      *ngFor="
-        let restaurantWithRatings of restaurantsWithRatings;
-        let i = index
-      "
-    >
+    <div *ngFor="let restaurantWithRatings of restaurantsWithRatings">
       <li
         class="restaurant"
         *ngIf="filterRestaurant(restaurantWithRatings.restaurant)"
-        (click)="selectRestaurant(i, restaurantWithRatings.restaurant)"
+        (click)="selectRestaurant(restaurantWithRatings, false)"
       >
         <div class="restaurant-infos">
           <h3 class="restaurant-name">
             {{ restaurantWithRatings.restaurant.restaurantName }}
           </h3>
-
-          <span
-            class="restaurant-ratings"
-            *ngIf="restaurantWithRatings.ratings.length"
-            >Stars : {{ restaurantWithRatings.restaurant.avgRating }}</span
-          >
+          <app-ratings-stars
+            [rating]="restaurantWithRatings.restaurant.avgRating"
+          ></app-ratings-stars>
           <span class="restaurant-address">{{
             restaurantWithRatings.restaurant.address
           }}</span>
@@ -69,21 +83,30 @@
     </div>
   </ul>
 </div>
-<div *ngIf="listState === 'focus'">
-  <span class="go-back"
-    ><i class="fas fa-arrow-left" (click)="listState = 'list'"></i
-  ></span>
+<div
+  class="focused-container"
+  *ngIf="listState === 'focus'"
+  [class.hide]="!showList"
+>
+  <i class="fas fa-arrow-left go-back" (click)="backToList()"></i>
+
   <div class="restaurant-img-carousel"></div>
   <div class="restaurant focused">
     <div class="restaurant-infos">
       <h3 class="restaurant-name">
         {{ focusedRestaurant.restaurantName }}
       </h3>
-
-      <span class="restaurant-ratings" *ngIf="focusedRestaurant.avgRating"
-        >Stars : {{ focusedRestaurant.avgRating }}</span
-      >
+      <app-ratings-stars
+        [rating]="focusedRestaurant.avgRating ? focusedRestaurant.avgRating : 0"
+      ></app-ratings-stars>
       <span class="restaurant-address">{{ focusedRestaurant.address }}</span>
     </div>
   </div>
+  <app-display-ratings
+    [ratings]="focusedRatings"
+    [customRatings]="
+      focusedRestaurant.id ? customRatings[focusedRestaurant.id] : undefined
+    "
+    (addCustomRating)="addCustomRating($event)"
+  ></app-display-ratings>
 </div>

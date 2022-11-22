@@ -1,4 +1,14 @@
 .page-header {
   grid-area: header;
-  background: $header-footer-background;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $header-background;
+
+  h1 {
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+  }
 }

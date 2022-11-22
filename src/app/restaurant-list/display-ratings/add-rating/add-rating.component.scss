@@ -1,4 +1,39 @@
 .add-rating-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 75%;
+  margin: 1rem auto;
+  input {
+    border-radius: 10px;
+    margin: 0.5rem 0;
+    padding: 5px 10px;
+  }
+
+  &-btn-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    button {
+      margin: 0 1rem;
+      padding: 5px 16px;
+    }
+  }
+}
+
+button {
+  cursor: pointer;
+  padding: 10px 21px;
+  border-radius: 20px;
+  background-color: #3368ff;
+  border: none;
+  color: white;
+  transition: all 0.025 ease-out;
+  &.disabled {
+    background-color: #818eb1;
+    cursor: not-allowed;
+  }
+  &:hover:not(.disabled) {
+    background-color: darken($color: #3368ff, $amount: 6%);
+  }
 }

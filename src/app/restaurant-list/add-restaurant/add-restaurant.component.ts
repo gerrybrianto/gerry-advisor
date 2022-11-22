@@ -29,7 +29,7 @@ export class AddRestaurantComponent implements OnInit {
 
   onSubmit() {
     console.log('in');
-    if (this.addRestaurantForm.valid) {
+    if (this.addRestaurantForm.valid && this.addRestaurantForm.dirty) {
       const newRestaurant: Restaurant = {
         id: uuid.v4(),
         restaurantName: this.addRestaurantForm.value.restaurantName,
@@ -40,7 +40,8 @@ export class AddRestaurantComponent implements OnInit {
       };
       this.addRestaurant.emit(newRestaurant);
       console.log('addRatingForm: ,', this.addRestaurantForm.value);
+      this.addRestaurantForm.reset({ restaurantName: '', address: '' });
+      this.showForm = false;
     }
-    this.showForm = false;
   }
 }

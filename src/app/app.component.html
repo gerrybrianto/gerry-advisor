@@ -1,18 +1,22 @@
 <div class="page-container">
-  <header class="page-header"></header>
+  <header class="page-header">
+    <h1><i class="fas fa-search"></i> Gerry Advisor</h1>
+  </header>
   <div class="page-content">
     <section class="restaurants-list-container">
       <app-restaurant-list
         class="restaurants-list"
+        [currentPosition]="currentPosition"
         [restaurantsWithRatings]="restaurantsWithRatings$ | async"
-        (add)="onAdd($event)"
+        (addMarker)="addMarker($event)"
         (zoomOnRestaurant)="zoomOnRestaurant($event)"
+        (resetPos)="resetPos()"
       ></app-restaurant-list>
     </section>
     <section class="map-container">
       <google-map
-        width="1100px"
-        height="550px"
+        [width]="mapWidth"
+        [height]="mapHeight"
         class="map"
         [options]="googleMapOptions"
         (mapClick)="refreshRestaurantsList($event)"

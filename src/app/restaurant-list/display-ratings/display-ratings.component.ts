@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Rating } from '../restaurants.model';
 
 @Component({
@@ -8,16 +8,16 @@ import { Rating } from '../restaurants.model';
 })
 export class DisplayRatingsComponent implements OnInit {
   @Input() ratings: Rating[];
-  @Input() show: boolean;
   @Input() customRatings?: Rating[];
+  @Output() addCustomRating: EventEmitter<Rating>;
   constructor() {
     this.ratings = [];
-    this.show = false;
+    this.addCustomRating = new EventEmitter();
   }
 
   ngOnInit(): void {}
 
-  addCustomRating(newRating: Rating) {
-    if (this.customRatings) this.customRatings.push(newRating);
+  emitNewCustomRating(newRating: Rating) {
+    this.addCustomRating.emit(newRating);
   }
 }

@@ -1,1 +1,22 @@
-<p>ratings-stars works!</p>
+<div class="rating-stars-container">
+  <span *ngFor="let starValue of starsArr" class="rating-star">
+    <img
+      class="rating-star-img"
+      src="assets/img/stars-icon/star_rate.png"
+      alt="Rating star"
+      *ngIf="starValue === 'star'"
+    />
+    <img
+      class="rating-star-img"
+      src="assets/img/stars-icon/star_rate_half.png"
+      alt="HalfRating star"
+      *ngIf="starValue === 'halfStar'"
+    />
+    <img
+      class="rating-star-img"
+      src="assets/img/stars-icon/star_rate_empty.png"
+      alt="Empty Rating star"
+      *ngIf="starValue === 'empty'"
+    />
+  </span>
+</div>

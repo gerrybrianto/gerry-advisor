@@ -1,13 +1,23 @@
-<ul class="ratings-list" *ngIf="show">
-  <li *ngFor="let rating of ratings">
-    <span class="ratings-list-stars"></span>
-    <p class="ratings-list-comment">{{ rating.comment }}</p>
-  </li>
+<app-add-rating
+  class="add-rating"
+  (addRating)="emitNewCustomRating($event)"
+></app-add-rating>
+<ul class="ratings-list">
   <div *ngIf="customRatings">
+    <h3 class="ratings-list-title">Gerry Advisors Reviews</h3>
     <li *ngFor="let customRating of customRatings">
-      <span class="ratings-list-stars"></span>
+      <app-ratings-stars [rating]="customRating.stars"></app-ratings-stars>
       <p class="ratings-list-comment">{{ customRating.comment }}</p>
     </li>
   </div>
+  <div *ngIf="ratings.length > 0">
+    <h3 class="ratings-list-title">Google Reviews</h3>
+    <li *ngFor="let rating of ratings">
+      <app-ratings-stars
+        [rating]="rating.stars"
+        *ngIf="rating.comment"
+      ></app-ratings-stars>
+      <p class="ratings-list-comment">{{ rating.comment }}</p>
+    </li>
+  </div>
 </ul>
-<app-add-rating (addRating)="addCustomRating($event)"></app-add-rating>

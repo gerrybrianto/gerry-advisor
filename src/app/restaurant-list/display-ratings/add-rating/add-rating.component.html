@@ -1,11 +1,30 @@
+<button *ngIf="!showForm" (click)="showForm = true">Add a custom review</button>
 <form
+  *ngIf="showForm"
   class="add-rating-form"
   [formGroup]="addRatingForm"
   (ngSubmit)="onSubmit()"
 >
-  <label for="add-rating"></label>
-  <input id="add-rating" type="number" formControlName="stars" />
-  <label for="add-comment"></label>
-  <input id="add-comment" type="text" formControlName="comment" />
-  <button type="submit" [disabled]="!addRatingForm.valid">Add</button>
+  <label for="add-rating">Stars</label>
+  <input
+    id="add-rating"
+    type="number"
+    formControlName="stars"
+    min="0"
+    max="5"
+    required
+  />
+  <label for="add-comment">Comment</label>
+  <input id="add-comment" type="text" formControlName="comment" required />
+  <div class="add-rating-form-btn-container">
+    <button (click)="showForm = false">Cancel</button>
+    <button
+      type="submit"
+      [class.disabled]="addRatingForm.invalid || !addRatingForm.dirty"
+      [disabled]="addRatingForm.invalid || !addRatingForm.dirty"
+    >
+      Add
+    </button>
+  </div>
+  <div class=""></div>
 </form>

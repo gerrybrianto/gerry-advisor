@@ -1,4 +1,7 @@
 //COLORS
+$header-background: #242323;
 
-$header-footer-background: #000000;
-$header-height: 150px;
+//COMPONENTS HEIGHT AND WIDTH
+$header-height: 80px;
+$list-width: 400px;
+$page-content-height: calc(100% - #{$header-height});

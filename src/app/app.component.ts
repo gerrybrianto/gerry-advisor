@@ -1,14 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Rating, Restaurant } from './restaurant-list/restaurants.model';
 import { GooglePlacesService } from './restaurant-list/restaurants.service';
 import { addRestaurant, removeRestaurant } from './store/restaurants.actions';
-import {
-  selectRestaurantCollection,
-  selectRestaurants,
-} from './store/restaurants.selector';
+import { selectRestaurants } from './store/restaurants.selector';
 
 @Component({
   selector: 'app-root',
@@ -19,16 +16,23 @@ export class AppComponent implements OnInit {
   title = 'gerry-advisor';
   googleMapOptions: google.maps.MapOptions;
   map: any;
+  mapHeight: string;
+  mapWidth: string;
   infoWindow: any;
   restaurants$: Observable<readonly Restaurant[] | null>;
   restaurantsWithRatings$: Observable<
     { restaurant: Restaurant; ratings: Rating[] }[]
   >;
-  //restaurantCollection$: Observable<readonly (Restaurant | undefined)[]>;
   markerInfos: { titles: string[]; positions: google.maps.LatLngLiteral[] };
   markerOptions: google.maps.MarkerOptions;
-  clickedPosition: { lat: number | undefined; lng: number | undefined };
+  currentPosition: { lat: number; lng: number };
   restaurantsSubscriptions: Subscription;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.mapHeight = `${window.innerHeight - 80}px`;
+    this.mapWidth = `${window.innerWidth - 400}px`;
+  }
 
   constructor(
     private store: Store,
@@ -38,12 +42,13 @@ export class AppComponent implements OnInit {
     this.map = google.maps.Map;
     this.infoWindow = google.maps.InfoWindow;
     this.restaurants$ = this.store.select(selectRestaurants);
-    //this.restaurantCollection$ = this.store.select(selectRestaurantCollection);
     this.restaurantsWithRatings$ = new Observable();
     this.markerInfos = { titles: [], positions: [] };
     this.markerOptions = { draggable: false };
-    this.clickedPosition = { lat: 0, lng: 0 };
+    this.currentPosition = { lat: 0, lng: 0 };
     this.restaurantsSubscriptions = new Subscription();
+    this.mapHeight = `${window.innerHeight - 80}px`;
+    this.mapWidth = `${window.innerWidth - 400}px`;
   }
 
   ngOnInit(): void {
@@ -54,7 +59,7 @@ export class AppComponent implements OnInit {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          this.clickedPosition = pos;
+          this.currentPosition = pos;
           this.setMapPos(pos, 15);
           this.refreshRestaurantsList(null, pos);
         }
@@ -82,6 +87,10 @@ export class AppComponent implements OnInit {
     console.log('gMapOptions: ', this.googleMapOptions);
   }
 
+  resetPos(): void {
+    this.setMapPos(this.currentPosition, 15);
+  }
+
   setMapPos(pos: { lat: number; lng: number }, zoom: number): void {
     this.googleMapOptions = {
       center: { lat: pos.lat, lng: pos.lng },
@@ -89,14 +98,14 @@ export class AppComponent implements OnInit {
     };
   }
 
-  setClickedPosition(
+  setcurrentPosition(
     event: google.maps.MapMouseEvent | google.maps.IconMouseEvent
   ) {
-    this.clickedPosition = {
-      lat: event.latLng?.lat(),
-      lng: event.latLng?.lng(),
+    this.currentPosition = {
+      lat: event.latLng ? event.latLng.lat() : 0,
+      lng: event.latLng ? event.latLng.lng() : 0,
     };
-    console.log('clicked position: ', this.clickedPosition);
+    console.log('clicked position: ', this.currentPosition);
   }
 
   setRestaurantMarkersInfos(restaurant: Restaurant): void {
@@ -107,16 +116,24 @@ export class AppComponent implements OnInit {
     this.markerInfos.titles.push(restaurant.restaurantName);
   }
 
+  addMarker(marker: { pos: google.maps.LatLngLiteral; title?: string }) {
+    if (marker.title) {
+      this.markerInfos.titles.push(marker.title);
+    }
+    this.markerInfos.positions.push(marker.pos);
+    console.log('new marker: ', marker.title, marker.pos);
+  }
+
   refreshRestaurantsList(
     event: google.maps.MapMouseEvent | google.maps.IconMouseEvent | null,
     pos?: { lat: number; lng: number }
   ): void {
     if (event) {
-      this.setClickedPosition(event);
+      this.setcurrentPosition(event);
     }
     this.restaurantsSubscriptions.unsubscribe();
     this.restaurantsWithRatings$ = this.restaurantsService
-      .getRestaurants(pos ? pos : this.clickedPosition)
+      .getRestaurants(pos ? pos : this.currentPosition)
       .pipe(
         map((restaurants) =>
           restaurants.map((restaurant) => this.getRestaurantRatings(restaurant))

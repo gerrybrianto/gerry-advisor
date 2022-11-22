@@ -3,20 +3,30 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-top: 1rem;
+
+  &-container {
+    width: 100%;
+  }
 }
 
 .restaurant {
+  font-size: 0.9rem;
   display: flex;
   border-bottom: solid 1px #d6d6d6;
   padding: 10px 10px 1.5rem 10px;
-  cursor: pointer;
-  &:hover {
+  width: 100%;
+  &:hover:not(.focused) {
+    cursor: pointer;
     background: darken($color: white, $amount: 7%);
   }
 
   &-infos {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    width: 250px;
+    margin-right: 1rem;
     & > *:not(:last-child) {
       margin-bottom: 1rem;
     }
@@ -26,13 +36,11 @@
     font-weight: 600;
   }
 
-  &-img {
-    margin-left: auto;
-  }
-
   &-img-carousel {
+    display: none;
     width: 100%;
     height: 200px;
+    background-color: red;
   }
 }
 
@@ -49,7 +57,13 @@ i {
 .ratings-filter {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 1rem;
+
+  input {
+    border-radius: 10px;
+    padding: 5px 10px;
+  }
 
   &-item {
     margin: 0 1rem;
@@ -69,4 +83,37 @@ i {
 
 .add-btn {
   margin: 1rem 0;
+}
+
+.go-back {
+  color: black;
+  margin: 1rem 0;
+  font-size: 1.2rem;
+}
+
+.focused-container {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.add-restaurant {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin: 1rem 0;
+}
+
+.close-list-container {
+  width: 100%;
+  display: flex;
+  margin: 1rem 0;
+
+  .close-list {
+    color: black;
+    font-size: 1.2rem;
+    margin: 0 1.2rem 0 auto;
+  }
+}
+
+.hide {
+  display: none;
 }
