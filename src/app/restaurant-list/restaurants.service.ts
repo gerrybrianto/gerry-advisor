@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Rating, Restaurant } from './restaurants.model';
 import { ResponseApi, Result } from '../interfaces/responseApi';
 import { ResponseApiDetails, Review } from '../interfaces/responseApiDetails';

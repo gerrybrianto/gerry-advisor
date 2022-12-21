@@ -105,8 +105,5 @@
       }
     }
   },
-  "defaultProject": "gerry-advisor",
-  "cli": {
-    "defaultCollection": "@ngrx/schematics"
-  }
+  "defaultProject": "gerry-advisor"
 }

@@ -1,11 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Rating, Restaurant } from './restaurant-list/restaurants.model';
 import { GooglePlacesService } from './restaurant-list/restaurants.service';
-import { addRestaurant, removeRestaurant } from './store/restaurants.actions';
-import { selectRestaurants } from './store/restaurants.selector';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +16,6 @@ export class AppComponent implements OnInit {
   mapHeight: string;
   mapWidth: string;
   infoWindow: any;
-  restaurants$: Observable<readonly Restaurant[] | null>;
   restaurantsWithRatings$: Observable<
     { restaurant: Restaurant; ratings: Rating[] }[]
   >;
@@ -34,14 +30,10 @@ export class AppComponent implements OnInit {
     this.mapWidth = `${window.innerWidth - 400}px`;
   }
 
-  constructor(
-    private store: Store,
-    private restaurantsService: GooglePlacesService
-  ) {
+  constructor(private restaurantsService: GooglePlacesService) {
     this.googleMapOptions = {};
     this.map = google.maps.Map;
     this.infoWindow = google.maps.InfoWindow;
-    this.restaurants$ = this.store.select(selectRestaurants);
     this.restaurantsWithRatings$ = new Observable();
     this.markerInfos = { titles: [], positions: [] };
     this.markerOptions = { draggable: false };
@@ -68,14 +60,6 @@ export class AppComponent implements OnInit {
       // Browser doesn't support Geolocation
       this.handleLocationError(false, this.infoWindow, this.map.getCenter()!);
     }
-  }
-
-  onAdd(restaurantId: string): void {
-    this.store.dispatch(addRestaurant({ restaurantId }));
-  }
-
-  onRemove(restaurantId: string): void {
-    this.store.dispatch(removeRestaurant({ restaurantId }));
   }
 
   zoomOnRestaurant(restaurant: Restaurant): void {

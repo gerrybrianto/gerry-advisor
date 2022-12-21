@@ -5,11 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StoreModule } from '@ngrx/store';
-import { restaurantsReducer } from './store/reducers/restaurants.reducer';
-import { collectionReducer } from './store/reducers/collection.reducer';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { RestaurantListComponent } from './restaurant-list/restaurant-list.component';
 import { RestaurantCollectionComponent } from './restaurant-collection/restaurant-collection.component';
 import { GooglePlacesService } from './restaurant-list/restaurants.service';
@@ -38,11 +33,6 @@ import { RatingsStarsComponent } from './restaurant-list/ratings-stars/ratings-s
     GoogleMapsModule,
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({
-      restaurants: restaurantsReducer,
-      collection: collectionReducer,
-    }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [GooglePlacesService],
   bootstrap: [AppComponent],
